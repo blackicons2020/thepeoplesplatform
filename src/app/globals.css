@@ -353,3 +353,18 @@ ul {
 .policy-section { margin-bottom: 3rem; }
 .policy-section h2 { font-family: var(--font-sans); font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--primary); }
 .policy-section p { font-size: 1.125rem; line-height: 1.7; color: var(--text-main); }
+
+/* Advertise Page */
+.plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.plan-card { cursor: pointer; text-align: center; border: 2px solid var(--border); transition: all 0.3s; padding: 1.5rem; border-radius: var(--radius-md); background: var(--bg-main); }
+.plan-card.selected { border-color: var(--primary); background: var(--bg-offset); transform: scale(1.05); }
+.price { font-size: 2rem; font-weight: 800; color: var(--primary); margin: 1rem 0; }
+.desc { font-size: 0.875rem; color: var(--text-muted); }
+
+.ad-form { max-width: 600px; margin: 4rem auto 0; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.field label { display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase; }
+.field input, .field textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; outline: none; background: transparent; }
+.field textarea { height: 100px; resize: none; }
+.mt-4 { margin-top: 1rem; }
+.mt-8 { margin-top: 2rem; }
