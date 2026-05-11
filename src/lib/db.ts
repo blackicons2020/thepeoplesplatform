@@ -1,16 +1,11 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI || "";
 
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable');
+if (!MONGODB_URI && process.env.NODE_ENV === 'production') {
+  console.warn("WARNING: MONGODB_URI is not defined. Database features will be disabled.");
 }
 
-/**
- * Global is used here to maintain a cached connection across hot reloads
- * in development. This prevents connections growing exponentially
- * during API Route usage.
- */
 let cached = (global as any).mongoose;
 
 if (!cached) {
@@ -18,6 +13,13 @@ if (!cached) {
 }
 
 async function connectDB() {
+  if (!MONGODB_URI) {
+    if (process.env.NODE_ENV === 'production') {
+       throw new Error("MONGODB_URI is missing in production environment.");
+    }
+    return null;
+  }
+
   if (cached.conn) {
     return cached.conn;
   }
@@ -27,11 +29,11 @@ async function connectDB() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose;
     });
   }
-
+  
   try {
     cached.conn = await cached.promise;
   } catch (e) {
