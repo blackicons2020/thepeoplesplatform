@@ -1,0 +1,54 @@
+import Link from 'next/link';
+import { Globe } from 'lucide-react';
+
+export default function Footer() {
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="footer">
+      <div className="container">
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <Link href="/" className="logo">
+              <Globe className="w-6 h-6 text-primary" />
+              <h2>The People's Platform</h2>
+            </Link>
+            <p className="footer-desc">
+              Independent, unbiased news reporting for the digital age. 
+              Committed to journalistic excellence and integrity.
+            </p>
+          </div>
+
+          <div className="footer-links">
+            <h3>Company</h3>
+            <ul>
+              <li><Link href="/about">About Us</Link></li>
+              <li><Link href="/contact">Contact</Link></li>
+              <li><Link href="/advertise">Advertise</Link></li>
+              <li><Link href="/authors">Our Authors</Link></li>
+            </ul>
+          </div>
+
+          <div className="footer-links">
+            <h3>Policies</h3>
+            <ul>
+              <li><Link href="/editorial-policy">Editorial Policy</Link></li>
+              <li><Link href="/privacy-policy">Privacy Policy</Link></li>
+              <li><Link href="/terms">Terms of Service</Link></li>
+              <li><Link href="/corrections-policy">Corrections</Link></li>
+            </ul>
+          </div>
+
+          <div className="footer-newsletter">
+            <h3>Stay Informed</h3>
+            <p>Get the latest headlines delivered to your inbox.</p>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <p>&copy; {year} The People's Platform. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
