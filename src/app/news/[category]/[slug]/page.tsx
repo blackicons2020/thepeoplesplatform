@@ -4,15 +4,16 @@ import { notFound } from 'next/navigation';
 import connectDB from '@/lib/db';
 import Article from '@/models/Article';
 import { getNewsArticleSchema, getBreadcrumbSchema } from '@/utils/schema';
-import { Clock, User, Share2, Bookmark, MessageSquare } from 'lucide-react';
+import { User, Share2, Bookmark } from 'lucide-react';
 
 interface PageProps {
-  params: { category: string; slug: string };
+  params: Promise<{ category: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
   await connectDB();
-  const article = await Article.findOne({ slug: params.slug, status: 'published' }).lean();
+  const article = await Article.findOne({ slug, status: 'published' }).lean();
 
   if (!article) return { title: 'Article Not Found' };
 
@@ -28,12 +29,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       authors: [article.author],
       section: article.category,
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: article.title,
-      description: article.excerpt,
-      images: [article.image || ''],
-    }
   };
 }
 
@@ -41,7 +36,7 @@ export async function generateStaticParams() {
   try {
     await connectDB();
     const articles = await Article.find({ status: 'published', slug: { $exists: true, $ne: "" } })
-      .limit(20) // Limit to 20 for build speed
+      .limit(20)
       .select('slug category')
       .lean();
     
@@ -52,14 +47,14 @@ export async function generateStaticParams() {
       slug: a.slug,
     }));
   } catch (error) {
-    console.error("Build-time static generation failed:", error);
-    return []; // Return empty array so build continues
+    return [];
   }
 }
 
 export default async function ArticlePage({ params }: PageProps) {
+  const { slug } = await params;
   await connectDB();
-  const article: any = await Article.findOne({ slug: params.slug, status: 'published' }).lean();
+  const article: any = await Article.findOne({ slug, status: 'published' }).lean();
 
   if (!article) notFound();
 
@@ -130,18 +125,10 @@ export default async function ArticlePage({ params }: PageProps) {
           <aside className="article-sidebar">
             <div className="sidebar-widget">
               <h3>Share this story</h3>
-              <div className="share-grid">
-                 {/* Social buttons would go here */}
-              </div>
-            </div>
-            <div className="sidebar-widget sticky">
-              <h3>Related Stories</h3>
-              {/* Related articles loop */}
             </div>
           </aside>
         </div>
       </div>
-
     </article>
   );
 }

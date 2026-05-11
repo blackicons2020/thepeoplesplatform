@@ -4,15 +4,16 @@ import ArticleCard from '@/components/ArticleCard';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
-  params: { category: string };
+  params: Promise<{ category: string }>;
 }
 
 export default async function CategoryPage({ params }: PageProps) {
-  const categoryName = params.category.charAt(0).toUpperCase() + params.category.slice(1);
+  const { category } = await params;
+  const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
   
   await connectDB();
   const articles = await Article.find({ 
-    category: { $regex: new RegExp(`^${params.category}$`, 'i') },
+    category: { $regex: new RegExp(`^${category}$`, 'i') },
     status: 'published' 
   }).sort({ date: -1 }).limit(20).lean();
 
