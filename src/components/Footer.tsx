@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Globe } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Globe, Lock } from 'lucide-react';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -17,6 +17,12 @@ export default function Footer() {
               Independent, unbiased news reporting for the digital age. 
               Committed to journalistic excellence and integrity.
             </p>
+            <div className="social-links">
+              <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
+              <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
+              <a href="#" aria-label="Instagram"><Instagram size={20} /></a>
+              <a href="#" aria-label="LinkedIn"><Linkedin size={20} /></a>
+            </div>
           </div>
 
           <div className="footer-links">
@@ -42,6 +48,9 @@ export default function Footer() {
           <div className="footer-newsletter">
             <h3>Stay Informed</h3>
             <p>Get the latest headlines delivered to your inbox.</p>
+            <Link href="/admin" className="admin-link">
+              <Lock size={14} /> Staff Dashboard
+            </Link>
           </div>
         </div>
 

@@ -1,38 +1,56 @@
 export default function EditorialPolicy() {
   return (
-    <div className="container py-12 max-w-3xl">
-      <h1 className="mb-8">Editorial Policy</h1>
-      
+    <div className="container py-16 max-w-4xl">
+      <header className="mb-12">
+        <h1 className="article-title">Editorial Policy & Standards</h1>
+        <p className="article-subheadline">The principles that guide our journalism.</p>
+      </header>
+
       <section className="policy-section">
-        <h2>Our Commitment to Truth</h2>
+        <h2>1. Fact-Checking Standards</h2>
         <p>
-          At The People's Platform, our primary mission is to provide accurate, unbiased, and timely news to our readers. 
-          We adhere to the highest standards of journalistic integrity and ethics.
+          Accuracy is our highest priority. Every report published by The People's Platform undergoes 
+          a multi-stage verification process. Our journalists are required to cross-reference all 
+          factual claims with at least two independent sources. For sensitive reporting, primary 
+          documentation or direct recordings are mandatory.
         </p>
       </section>
 
       <section className="policy-section">
-        <h2>Fact-Checking Standards</h2>
+        <h2>2. Sourcing and Attribution</h2>
         <p>
-          Every story published on our platform undergoes a rigorous fact-checking process. We verify information 
-          through multiple independent sources whenever possible. Our journalists are required to cross-reference 
-          claims and provide attribution for all data and quotes.
+          We strive for maximum transparency regarding our sources. We identify our sources by name 
+          whenever possible. If a source requests anonymity, we only grant it if the information 
+          is vital to the public interest and cannot be obtained elsewhere. We always explain 
+          to our readers the reason for granting anonymity.
         </p>
       </section>
 
       <section className="policy-section">
-        <h2>Independence and Impartiality</h2>
+        <h2>3. Neutrality and Balance</h2>
         <p>
-          The People's Platform is not affiliated with any political party, government agency, or corporate interest. 
-          Our editorial decisions are made independently of our advertisers and sponsors.
+          Our news reporting is neutral and evidence-based. We do not take sides in political or 
+          corporate disputes. We make every effort to reach out to all parties mentioned in a story 
+          for comment before publication. If a party declines to comment, we state that clearly 
+          in the report.
         </p>
       </section>
 
       <section className="policy-section">
-        <h2>Corrections and Transparency</h2>
+        <h2>4. Opinion vs. News</h2>
         <p>
-          If we make a mistake, we correct it promptly and transparently. Corrections are clearly labeled 
-          on the article page to ensure our readers are informed of any changes to the original reporting.
+          We maintain a clear distinction between news reporting and opinion pieces. All opinion 
+          content is explicitly labeled as "Opinion," "Editorial," or "Commentary." Opinion 
+          pieces do not represent the views of the newsroom.
+        </p>
+      </section>
+
+      <section className="policy-section">
+        <h2>5. Conflict of Interest</h2>
+        <p>
+          Our staff members are prohibited from accepting gifts, travel, or any form of compensation 
+          from sources or organizations they cover. Any potential conflict of interest must be 
+          disclosed to the Editorial Director and, where appropriate, to our readers.
         </p>
       </section>
     </div>
