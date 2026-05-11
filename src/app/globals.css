@@ -368,3 +368,8 @@ ul {
 .field textarea { height: 100px; resize: none; }
 .mt-4 { margin-top: 1rem; }
 .mt-8 { margin-top: 2rem; }
+
+/* Category Page */
+.category-title { font-size: 3rem; font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+.category-header-line { height: 4px; background: var(--primary); width: 60px; margin-bottom: 3rem; }
+.empty-state { padding: 4rem; text-align: center; background: var(--bg-offset); border-radius: var(--radius-lg); color: var(--text-muted); }
