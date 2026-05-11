@@ -38,12 +38,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-  await connectDB();
-  const articles = await Article.find({ status: 'published', slug: { $exists: true, $ne: "" } }).limit(100).select('slug category').lean();
-  return articles.map((a: any) => ({
-    category: a.category?.toLowerCase() || 'news',
-    slug: a.slug,
-  }));
+  try {
+    await connectDB();
+    const articles = await Article.find({ status: 'published', slug: { $exists: true, $ne: "" } })
+      .limit(20) // Limit to 20 for build speed
+      .select('slug category')
+      .lean();
+    
+    if (!articles || articles.length === 0) return [];
+
+    return articles.map((a: any) => ({
+      category: a.category?.toLowerCase() || 'news',
+      slug: a.slug,
+    }));
+  } catch (error) {
+    console.error("Build-time static generation failed:", error);
+    return []; // Return empty array so build continues
+  }
 }
 
 export default async function ArticlePage({ params }: PageProps) {
