@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI || "";
 
-if (!MONGODB_URI && process.env.NODE_ENV === 'production') {
-  console.warn("WARNING: MONGODB_URI is not defined. Database features will be disabled.");
-}
-
 let cached = (global as any).mongoose;
 
 if (!cached) {
@@ -13,10 +9,9 @@ if (!cached) {
 }
 
 async function connectDB() {
+  // If no URI is found, return null instead of crashing the process
   if (!MONGODB_URI) {
-    if (process.env.NODE_ENV === 'production') {
-       throw new Error("MONGODB_URI is missing in production environment.");
-    }
+    console.warn("MONGODB_URI is missing. Database connection skipped.");
     return null;
   }
 

@@ -4,11 +4,16 @@ import ArticleCard from '@/components/ArticleCard';
 import { getOrganizationSchema } from '@/utils/schema';
 
 async function getArticles() {
-  await connectDB();
-  return Article.find({ status: 'published' })
-    .sort({ date: -1 })
-    .limit(10)
-    .lean();
+  try {
+    await connectDB();
+    return await Article.find({ status: 'published' })
+      .sort({ date: -1 })
+      .limit(10)
+      .lean() || [];
+  } catch (error) {
+    console.error("Homepage article fetch failed:", error);
+    return [];
+  }
 }
 
 export default async function Home() {
@@ -28,21 +33,23 @@ export default async function Home() {
         {featuredArticle ? (
           <ArticleCard article={featuredArticle} featured />
         ) : (
-          <div className="empty-state">No articles published yet.</div>
+          <div className="empty-state">No articles published yet. Check your database connection.</div>
         )}
       </section>
 
-      <section className="latest-news">
-        <div className="section-header">
-          <h2>Latest Stories</h2>
-          <div className="header-line"></div>
-        </div>
-        <div className="article-grid">
-          {latestArticles.map((article: any) => (
-            <ArticleCard key={article._id.toString()} article={article} />
-          ))}
-        </div>
-      </section>
+      {latestArticles.length > 0 && (
+        <section className="latest-news">
+          <div className="section-header">
+            <h2>Latest Stories</h2>
+            <div className="header-line"></div>
+          </div>
+          <div className="article-grid">
+            {latestArticles.map((article: any) => (
+              <ArticleCard key={article._id.toString()} article={article} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
