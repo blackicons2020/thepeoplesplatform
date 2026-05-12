@@ -9,6 +9,26 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [authError, setAuthError] = useState('');
+
+  useEffect(() => {
+    if (localStorage.getItem('admin_auth') === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput === 'Admin2026') {
+      setIsAuthenticated(true);
+      localStorage.setItem('admin_auth', 'true');
+      setAuthError('');
+    } else {
+      setAuthError('Invalid administrative passcode');
+    }
+  };
 
   const initialFormState = {
     title: '',
@@ -132,7 +152,32 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="admin-container">
+    <>
+      {!isAuthenticated ? (
+        <div className="admin-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#111827' }}>
+          <div style={{ background: '#1f2937', padding: '3rem', borderRadius: '1rem', width: '100%', maxWidth: '400px', textAlign: 'center', border: '1px solid #374151', color: 'white' }}>
+            <Shield className="w-12 h-12" style={{ margin: '0 auto 1.5rem', color: '#10b981' }} />
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Staff Portal Access</h2>
+            <p style={{ color: '#9ca3af', fontSize: '0.875rem', marginBottom: '2rem' }}>Please enter the administrative passcode to continue.</p>
+            
+            <form onSubmit={handleLogin}>
+              {authError && <div style={{ color: '#ef4444', fontSize: '0.75rem', marginBottom: '1rem' }}>{authError}</div>}
+              <input 
+                type="password" 
+                placeholder="Enter passcode" 
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid #4b5563', background: '#111827', color: 'white', marginBottom: '1.5rem', outline: 'none', textAlign: 'center', letterSpacing: '0.1em' }}
+                autoFocus
+              />
+              <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                Secure Unlock
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <div className="admin-container">
       <aside className="admin-sidebar">
         <div className="sidebar-header">
           <Shield className="w-6 h-6" />
@@ -231,6 +276,10 @@ export default function AdminDashboard() {
                   <div className="field" style={{ marginBottom: '1rem' }}>
                     <input name="subHeadline" value={formData.subHeadline} onChange={handleInputChange} type="text" placeholder="Sub-Title / Headline" />
                   </div>
+                  <div className="field" style={{ marginBottom: '1.5rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>Writer / Author Name</label>
+                    <input name="author" value={formData.author} onChange={handleInputChange} type="text" placeholder="e.g. John Doe" style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', outline: 'none' }} />
+                  </div>
                   <div className="field" style={{ marginBottom: '2rem' }}>
                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>Article Image</label>
                     <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'block', width: '100%', padding: '0.75rem', border: '1px dashed #d1d5db', borderRadius: '0.5rem', background: '#f9fafb', cursor: 'pointer' }} />
@@ -277,5 +326,7 @@ export default function AdminDashboard() {
         </section>
       </main>
     </div>
+      )}
+    </>
   );
 }

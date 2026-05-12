@@ -1,6 +1,7 @@
 import connectDB from '@/lib/db';
 import Article from '@/models/Article';
 import ArticleCard from '@/components/ArticleCard';
+import AdBanner from '@/components/AdBanner';
 import { getOrganizationSchema } from '@/utils/schema';
 
 export const revalidate = 60;
@@ -38,6 +39,8 @@ export default async function Home() {
           <div className="empty-state">No articles published yet. Check your database connection.</div>
         )}
       </section>
+
+      <AdBanner />
 
       {latestArticles.length > 0 && (
         <section className="latest-news">

@@ -80,9 +80,6 @@ export default function Header() {
             {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
           
-          <Link href="/submit-news" className="btn btn-primary hide-mobile">
-            Submit News
-          </Link>
           <button className="menu-toggle hide-desktop" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>

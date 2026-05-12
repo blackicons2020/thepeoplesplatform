@@ -314,7 +314,7 @@ ul {
 .featured-image { width: 100%; height: auto; display: block; }
 
 .article-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; }
-.article-content { font-size: 1.25rem; line-height: 1.8; color: var(--text-main); font-family: var(--font-serif); }
+.article-content { font-size: 1.25rem; line-height: 1.8; color: var(--text-main); font-family: var(--font-serif); white-space: pre-wrap; }
 .article-content p { margin-bottom: 2rem; }
 .article-content h2 { font-size: 2rem; margin: 3rem 0 1.5rem; }
 

@@ -36,6 +36,7 @@ export default function Footer() {
               <li><Link href="/privacy-policy">Privacy Policy</Link></li>
               <li><Link href="/terms">Terms of Service</Link></li>
               <li><Link href="/corrections-policy">Corrections</Link></li>
+              <li><Link href="/submit-news" style={{ color: 'var(--primary)', fontWeight: 600 }}>Submit News / Tip</Link></li>
             </ul>
           </div>
 
@@ -62,8 +63,8 @@ export default function Footer() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
               </a>
             </div>
-            <Link href="/admin" className="admin-link" style={{ marginTop: '0' }}>
-              <Lock size={14} /> Staff Dashboard
+            <Link href="/admin" style={{ opacity: 0.15, fontSize: '0.65rem', border: 'none', background: 'transparent', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: 'var(--text-muted)', transition: 'opacity 0.2s' }}>
+              <Lock size={10} /> Staff Access
             </Link>
           </div>
         </div>
