@@ -32,17 +32,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!article) return { title: 'Article Not Found' };
 
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://thepeoplesplatform.online";
+  const cleanSlugForLink = (article.slug || '').replace(/-\d{13}$/, '');
+  const absoluteUrl = `${SITE_URL}/${cleanSlugForLink}`;
+  const imageUrl = article.image && article.image.startsWith('http') ? article.image : `${SITE_URL}${article.image || '/logo.png'}`;
+
   return {
     title: article.metaTitle || article.title,
     description: article.metaDescription || article.excerpt,
+    metadataBase: new URL(SITE_URL),
+    alternates: {
+      canonical: absoluteUrl,
+    },
     openGraph: {
       title: article.title,
-      description: article.excerpt,
-      images: [article.image || ''],
+      description: article.excerpt || article.metaDescription,
+      url: absoluteUrl,
+      siteName: "The People's Platform",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
       type: 'article',
       publishedTime: article.date?.toISOString(),
-      authors: [article.author],
-      section: article.category,
+      authors: [article.author || 'Staff Reporter'],
+      section: article.category || 'General',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.excerpt || article.metaDescription,
+      images: [imageUrl],
     },
   };
 }
