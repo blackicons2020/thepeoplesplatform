@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Facebook, Twitter, Instagram, Linkedin, Globe, Lock } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Globe, Lock, Info } from 'lucide-react';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -19,7 +19,6 @@ export default function Footer() {
             </p>
             <div className="social-links">
               <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
-              <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
               <a href="#" aria-label="Instagram"><Instagram size={20} /></a>
               <a href="#" aria-label="LinkedIn"><Linkedin size={20} /></a>
             </div>
