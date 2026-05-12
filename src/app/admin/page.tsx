@@ -48,6 +48,17 @@ export default function AdminDashboard() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, image: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveArticle = async (publishNow = false) => {
     setIsSaving(true);
     
@@ -221,7 +232,13 @@ export default function AdminDashboard() {
                     <input name="subHeadline" value={formData.subHeadline} onChange={handleInputChange} type="text" placeholder="Sub-Title / Headline" />
                   </div>
                   <div className="field" style={{ marginBottom: '2rem' }}>
-                    <input name="image" value={formData.image} onChange={handleInputChange} type="text" placeholder="Article Image URL" />
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>Article Image</label>
+                    <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'block', width: '100%', padding: '0.75rem', border: '1px dashed #d1d5db', borderRadius: '0.5rem', background: '#f9fafb', cursor: 'pointer' }} />
+                    {formData.image && (
+                      <div style={{ marginTop: '1rem', width: '100%', height: '200px', position: 'relative', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                        <img src={formData.image} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
+                    )}
                   </div>
                   <textarea name="content" value={formData.content} onChange={handleInputChange} placeholder="Write your story..." className="content-textarea"></textarea>
                 </div>
