@@ -68,14 +68,14 @@ export default async function Home() {
           <div className="empty-state">No articles published yet. Check your database connection.</div>
         )}
 
-        <div className="hero-ad-slot" style={{ height: '100%', minHeight: '400px' }}>
-          <div style={{ border: '3px solid black', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '2rem', textAlign: 'center', background: 'white', borderRadius: '4px' }}>
-            <span style={{ fontSize: '1.125rem', fontWeight: 700, color: 'black', marginBottom: '2.5rem', fontFamily: 'var(--font-sans)', display: 'block' }}>
+        <div className="hero-ad-slot" style={{ height: '100%', minHeight: '400px', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: 'var(--bg-offset)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '2rem', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1.5rem' }}>
               - Sponsored Advertisement -
             </span>
-            <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'black', fontFamily: 'var(--font-sans)', lineHeight: 1.5 }}>
-              Your Banner Ad Here &bull; Advertise with us
-            </p>
+            <div style={{ color: 'var(--text-muted)', fontWeight: 600, fontSize: '1rem' }}>
+              <p>Your Banner Ad Here &bull; <a href="/advertise" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Advertise with us</a></p>
+            </div>
           </div>
         </div>
       </section>
