@@ -3,6 +3,8 @@ import Article from '@/models/Article';
 import ArticleCard from '@/components/ArticleCard';
 import { notFound } from 'next/navigation';
 
+export const revalidate = 60;
+
 interface PageProps {
   params: Promise<{ category: string }>;
 }

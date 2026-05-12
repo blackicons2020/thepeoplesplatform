@@ -6,6 +6,8 @@ import Article from '@/models/Article';
 import { getNewsArticleSchema, getBreadcrumbSchema } from '@/utils/schema';
 import { User, Share2, Bookmark } from 'lucide-react';
 
+export const revalidate = 60;
+
 interface PageProps {
   params: Promise<{ category: string; slug: string }>;
 }

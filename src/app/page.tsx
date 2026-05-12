@@ -3,6 +3,8 @@ import Article from '@/models/Article';
 import ArticleCard from '@/components/ArticleCard';
 import { getOrganizationSchema } from '@/utils/schema';
 
+export const revalidate = 60;
+
 async function getArticles() {
   try {
     await connectDB();
