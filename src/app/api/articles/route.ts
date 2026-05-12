@@ -19,8 +19,7 @@ export async function POST(request: Request) {
     
     // Auto-generate slug if not provided
     if (!data.slug && data.title) {
-      const baseSlug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-      data.slug = `${baseSlug}-${Date.now()}`;
+      data.slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     }
     
     // Ensure category exists

@@ -9,7 +9,7 @@ interface ArticleCardProps {
 
 export default function ArticleCard({ article, featured }: ArticleCardProps) {
   const category = article.category || 'News';
-  const href = `/news/${category.toLowerCase()}/${article.slug}`;
+  const href = `/${article.slug}`;
 
   if (featured) {
     return (

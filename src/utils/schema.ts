@@ -28,7 +28,7 @@ export function getNewsArticleSchema(article: any) {
     "description": article.excerpt || article.metaDescription,
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `${SITE_URL}/news/${article.category.toLowerCase()}/${article.slug}`
+      "@id": `${SITE_URL}/${article.slug}`
     }
   };
 }

@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .lean();
 
     const articleEntries: MetadataRoute.Sitemap = articles.map((article: any) => ({
-      url: `${SITE_URL}/news/${article.category?.toLowerCase() || 'news'}/${article.slug}`,
+      url: `${SITE_URL}/${article.slug}`,
       lastModified: article.updatedAt || article.date,
       changeFrequency: 'weekly',
       priority: 0.7,

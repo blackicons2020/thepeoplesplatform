@@ -37,8 +37,8 @@ export async function GET() {
   articles.forEach((article: any) => {
     feed.addItem({
       title: article.title,
-      id: `${SITE_URL}/news/${article.category.toLowerCase()}/${article.slug}`,
-      link: `${SITE_URL}/news/${article.category.toLowerCase()}/${article.slug}`,
+      id: `${SITE_URL}/${article.slug}`,
+      link: `${SITE_URL}/${article.slug}`,
       description: article.excerpt,
       content: article.content,
       author: [
