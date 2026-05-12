@@ -48,8 +48,14 @@ export default function AdminDashboard() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSaveArticle = async () => {
+  const handleSaveArticle = async (publishNow = false) => {
     setIsSaving(true);
+    
+    const payload = { ...formData };
+    if (publishNow) {
+      payload.status = 'published';
+    }
+
     try {
       const url = editingId ? `/api/articles/${editingId}` : '/api/articles';
       const method = editingId ? 'PUT' : 'POST';
@@ -57,7 +63,7 @@ export default function AdminDashboard() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -229,8 +235,11 @@ export default function AdminDashboard() {
                           <option value="published">Published</option>
                         </select>
                       </div>
-                      <button onClick={handleSaveArticle} disabled={isSaving} className="btn btn-primary w-full mt-4">
-                        {isSaving ? 'Saving...' : 'Save Article'}
+                      <button onClick={() => handleSaveArticle(false)} disabled={isSaving} className="btn w-full mt-4" style={{ background: '#e5e7eb', color: '#111827', border: '1px solid #d1d5db' }}>
+                        {isSaving ? 'Saving...' : 'Save Draft'}
+                      </button>
+                      <button onClick={() => handleSaveArticle(true)} disabled={isSaving} className="btn btn-primary w-full mt-2">
+                        {isSaving ? 'Publishing...' : 'Publish'}
                       </button>
                    </div>
                    <div className="sidebar-box">
