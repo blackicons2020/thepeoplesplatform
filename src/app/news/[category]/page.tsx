@@ -29,7 +29,7 @@ export default async function CategoryPage({ params }: PageProps) {
       </header>
 
       {articles.length > 0 ? (
-        <div className="article-grid">
+        <div className="article-grid-custom">
           {articles.map((article: any) => (
             <ArticleCard key={article._id.toString()} article={article} />
           ))}

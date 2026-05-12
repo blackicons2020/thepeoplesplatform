@@ -35,25 +35,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export async function generateStaticParams() {
-  try {
-    await connectDB();
-    const articles = await Article.find({ status: 'published', slug: { $exists: true, $ne: "" } })
-      .limit(20)
-      .select('slug category')
-      .lean();
-    
-    if (!articles || articles.length === 0) return [];
-
-    return articles.map((a: any) => ({
-      category: a.category?.toLowerCase() || 'news',
-      slug: a.slug,
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
   await connectDB();
