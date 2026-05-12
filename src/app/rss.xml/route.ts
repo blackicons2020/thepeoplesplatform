@@ -35,10 +35,11 @@ export async function GET() {
   });
 
   articles.forEach((article: any) => {
+    const cleanSlug = (article.slug || '').replace(/-\d{13}$/, '');
     feed.addItem({
       title: article.title,
-      id: `${SITE_URL}/${article.slug}`,
-      link: `${SITE_URL}/${article.slug}`,
+      id: `${SITE_URL}/${cleanSlug}`,
+      link: `${SITE_URL}/${cleanSlug}`,
       description: article.excerpt,
       content: article.content,
       author: [

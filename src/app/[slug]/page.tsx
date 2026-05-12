@@ -18,7 +18,17 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   await connectDB();
-  const article = await Article.findOne({ slug, status: 'published' }).lean();
+
+  const cleanSlugEscaped = slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const query = {
+    $or: [
+      { slug },
+      { slug: new RegExp(`^${cleanSlugEscaped}(-\\d{13})?$`, 'i') }
+    ],
+    status: 'published'
+  };
+
+  const article = await Article.findOne(query).lean();
 
   if (!article) return { title: 'Article Not Found' };
 
@@ -40,7 +50,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
   await connectDB();
-  const article: any = await Article.findOne({ slug, status: 'published' }).lean();
+
+  const cleanSlugEscaped = slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const query = {
+    $or: [
+      { slug },
+      { slug: new RegExp(`^${cleanSlugEscaped}(-\\d{13})?$`, 'i') }
+    ],
+    status: 'published'
+  };
+
+  const article: any = await Article.findOne(query).lean();
 
   if (!article) notFound();
 
@@ -51,7 +71,8 @@ export default async function ArticlePage({ params }: PageProps) {
     status: 'published'
   }).sort({ date: -1 }).limit(3).lean() || [];
 
-  const shareUrl = `https://thepeoplesplatform.vercel.app/${article.slug}`;
+  const cleanSlugForLink = article.slug.replace(/-\d{13}$/, '');
+  const shareUrl = `https://thepeoplesplatform.vercel.app/${cleanSlugForLink}`;
   const encodedUrl = encodeURIComponent(shareUrl);
   const encodedTitle = encodeURIComponent(article.title);
 
@@ -160,7 +181,7 @@ export default async function ArticlePage({ params }: PageProps) {
         </div>
 
         {/* 7. Comment section */}
-        <Comments slug={article.slug} />
+        <Comments slug={cleanSlugForLink} />
 
         {/* 8. Related articles populated after the comment section */}
         {relatedArticles.length > 0 && (

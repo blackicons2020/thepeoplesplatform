@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .lean();
 
     const articleEntries: MetadataRoute.Sitemap = articles.map((article: any) => ({
-      url: `${SITE_URL}/${article.slug}`,
+      url: `${SITE_URL}/${(article.slug || '').replace(/-\d{13}$/, '')}`,
       lastModified: article.updatedAt || article.date,
       changeFrequency: 'weekly',
       priority: 0.7,

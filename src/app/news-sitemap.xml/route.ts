@@ -22,7 +22,7 @@ export async function GET() {
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   ${articles.map((article: any) => `
   <url>
-    <loc>${SITE_URL}/${article.slug}</loc>
+    <loc>${SITE_URL}/${(article.slug || '').replace(/-\d{13}$/, '')}</loc>
     <news:news>
       <news:publication>
         <news:name>${SITE_NAME}</news:name>

@@ -24,6 +24,7 @@ export default async function Home() {
   const articles = await getArticles();
   const featuredArticle: any = articles[0];
   const latestArticles = articles.slice(1);
+  const featuredCleanSlug = featuredArticle ? (featuredArticle.slug || '').replace(/-\d{13}$/, '') : '';
 
   return (
     <div className="container py-8">
@@ -36,7 +37,7 @@ export default async function Home() {
       <section className="hero-grid-custom">
         {featuredArticle ? (
           <div className="featured-article-stacked">
-            <Link href={`/${featuredArticle.slug}`} style={{ display: 'block' }}>
+            <Link href={`/${featuredCleanSlug}`} style={{ display: 'block' }}>
               <div style={{ position: 'relative', width: '100%', height: '450px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', marginBottom: '1.25rem', background: 'var(--bg-offset)' }}>
                 <Image 
                   src={featuredArticle.image || '/placeholder.jpg'} 
