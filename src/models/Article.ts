@@ -24,6 +24,8 @@ const articleSchema = new Schema({
 
 // Add index for fast searching and sitemap generation
 articleSchema.index({ status: 1, date: -1 });
+articleSchema.index({ slug: 1, status: 1 });
+articleSchema.index({ category: 1, status: 1, date: -1 });
 
 const Article = models.Article || model('Article', articleSchema);
 

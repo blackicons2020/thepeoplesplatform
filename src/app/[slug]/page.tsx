@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 import connectDB from '@/lib/db';
 import Article from '@/models/Article';
 import { getNewsArticleSchema } from '@/utils/schema';
@@ -15,10 +16,9 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+// React cache wrapper to deduplicate server-side database requests per page lifecycle
+const getCachedArticleBySlug = cache(async (slug: string) => {
   await connectDB();
-
   const cleanSlugEscaped = slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const query = {
     $or: [
@@ -27,8 +27,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ],
     status: 'published'
   };
+  return await Article.findOne(query).lean();
+});
 
-  const article = await Article.findOne(query).lean();
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getCachedArticleBySlug(slug);
 
   if (!article) return { title: 'Article Not Found' };
 
@@ -73,18 +77,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
-  await connectDB();
-
-  const cleanSlugEscaped = slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const query = {
-    $or: [
-      { slug },
-      { slug: new RegExp(`^${cleanSlugEscaped}(-\\d{13})?$`, 'i') }
-    ],
-    status: 'published'
-  };
-
-  const article: any = await Article.findOne(query).lean();
+  const article: any = await getCachedArticleBySlug(slug);
 
   if (!article) notFound();
 
