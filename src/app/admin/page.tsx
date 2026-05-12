@@ -1,10 +1,118 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LayoutGrid, PenTool, Shield, Search } from 'lucide-react';
+import { LayoutGrid, PenTool, Shield, Search, Trash2, Loader2 } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('articles');
+  const [articles, setArticles] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const initialFormState = {
+    title: '',
+    subHeadline: '',
+    image: '',
+    content: '',
+    status: 'pending',
+    metaTitle: '',
+    metaDescription: '',
+    category: 'General',
+    author: 'Staff Reporter'
+  };
+
+  const [formData, setFormData] = useState(initialFormState);
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  const fetchArticles = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/articles');
+      const data = await res.json();
+      if (data.success) {
+        setArticles(data.articles);
+      }
+    } catch (error) {
+      console.error('Failed to fetch articles:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveArticle = async () => {
+    setIsSaving(true);
+    try {
+      const url = editingId ? `/api/articles/${editingId}` : '/api/articles';
+      const method = editingId ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setFormData(initialFormState);
+        setEditingId(null);
+        setActiveTab('articles');
+        fetchArticles();
+      } else {
+        alert('Failed to save article: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Failed to save article:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleEdit = (article: any) => {
+    setFormData({
+      title: article.title || '',
+      subHeadline: article.subHeadline || '',
+      image: article.image || '',
+      content: article.content || '',
+      status: article.status || 'pending',
+      metaTitle: article.metaTitle || '',
+      metaDescription: article.metaDescription || '',
+      category: article.category || 'General',
+      author: article.author || 'Staff Reporter'
+    });
+    setEditingId(article._id);
+    setActiveTab('compose');
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this article?')) return;
+
+    try {
+      const res = await fetch(`/api/articles/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        fetchArticles();
+      } else {
+        alert('Failed to delete article: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Failed to delete article:', error);
+    }
+  };
+
+  const resetForm = () => {
+    setFormData(initialFormState);
+    setEditingId(null);
+    setActiveTab('compose');
+  };
 
   return (
     <div className="admin-container">
@@ -16,13 +124,13 @@ export default function AdminDashboard() {
         <nav className="sidebar-nav">
           <button 
             className={activeTab === 'articles' ? 'active' : ''} 
-            onClick={() => setActiveTab('articles')}
+            onClick={() => { setActiveTab('articles'); fetchArticles(); }}
           >
             <LayoutGrid className="w-5 h-5" /> Articles
           </button>
           <button 
             className={activeTab === 'compose' ? 'active' : ''} 
-            onClick={() => setActiveTab('compose')}
+            onClick={resetForm}
           >
             <PenTool className="w-5 h-5" /> New Story
           </button>
@@ -31,7 +139,7 @@ export default function AdminDashboard() {
 
       <main className="admin-content">
         <header className="content-header">
-          <h2>{activeTab === 'articles' ? 'All Articles' : 'Compose Story'}</h2>
+          <h2>{activeTab === 'articles' ? 'All Articles' : (editingId ? 'Edit Story' : 'Compose Story')}</h2>
           <div className="user-profile">
             <span>Admin</span>
           </div>
@@ -50,46 +158,90 @@ export default function AdminDashboard() {
                 </select>
               </div>
 
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Author</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* Articles row map */}
-                </tbody>
-              </table>
+              {isLoading ? (
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem', color: '#6b7280' }}>
+                  Loading articles...
+                </div>
+              ) : (
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                      <th>Author</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {articles.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} style={{ textAlign: 'center', color: '#6b7280' }}>No articles found.</td>
+                      </tr>
+                    ) : (
+                      articles.map((article) => (
+                        <tr key={article._id}>
+                          <td style={{ fontWeight: 500 }}>{article.title}</td>
+                          <td>
+                            <span className={`badge ${article.status === 'published' ? 'badge-primary' : ''}`} style={article.status !== 'published' ? { background: '#e5e7eb', color: '#374151' } : {}}>
+                              {article.status ? article.status.charAt(0).toUpperCase() + article.status.slice(1) : 'Pending'}
+                            </span>
+                          </td>
+                          <td>{new Date(article.date).toLocaleDateString()}</td>
+                          <td>{article.author}</td>
+                          <td>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <button onClick={() => handleEdit(article)} className="icon-btn" title="Edit Article" style={{ color: '#3b82f6' }}>
+                                <PenTool className="w-4 h-4" />
+                              </button>
+                              <button onClick={() => handleDelete(article._id)} className="icon-btn" title="Delete Article" style={{ color: '#ef4444' }}>
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              )}
             </div>
           ) : (
             <div className="compose-form">
               <div className="form-grid">
                 <div className="form-main">
-                  <input type="text" placeholder="Article Title" className="title-input" />
-                  <textarea placeholder="Write your story..." className="content-textarea"></textarea>
+                  <input name="title" value={formData.title} onChange={handleInputChange} type="text" placeholder="Article Title" className="title-input" />
+                  <div className="field" style={{ marginBottom: '1rem' }}>
+                    <input name="subHeadline" value={formData.subHeadline} onChange={handleInputChange} type="text" placeholder="Sub-Title / Headline" />
+                  </div>
+                  <div className="field" style={{ marginBottom: '2rem' }}>
+                    <input name="image" value={formData.image} onChange={handleInputChange} type="text" placeholder="Article Image URL" />
+                  </div>
+                  <textarea name="content" value={formData.content} onChange={handleInputChange} placeholder="Write your story..." className="content-textarea"></textarea>
                 </div>
                 <aside className="form-sidebar">
                    <div className="sidebar-box">
                       <h3>Publishing</h3>
                       <div className="status-item">
                         <label>Status:</label>
-                        <select><option>Draft</option><option>Published</option></select>
+                        <select name="status" value={formData.status} onChange={handleInputChange}>
+                          <option value="pending">Pending</option>
+                          <option value="published">Published</option>
+                        </select>
                       </div>
-                      <button className="btn btn-primary w-full mt-4">Save Article</button>
+                      <button onClick={handleSaveArticle} disabled={isSaving} className="btn btn-primary w-full mt-4">
+                        {isSaving ? 'Saving...' : 'Save Article'}
+                      </button>
                    </div>
                    <div className="sidebar-box">
                       <h3>SEO Optimization</h3>
                       <div className="seo-field">
                         <label>Meta Title</label>
-                        <input type="text" />
+                        <input name="metaTitle" value={formData.metaTitle} onChange={handleInputChange} type="text" />
                       </div>
                       <div className="seo-field">
                         <label>Meta Description</label>
-                        <textarea></textarea>
+                        <textarea name="metaDescription" value={formData.metaDescription} onChange={handleInputChange}></textarea>
                       </div>
                    </div>
                 </aside>

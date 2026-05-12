@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Globe, Lock, Info, Mail, MessageSquare, Share2 } from 'lucide-react';
+import { Globe, Lock, Info, Mail, MessageSquare, Share2, Twitter, Facebook, Instagram } from 'lucide-react';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -18,9 +18,9 @@ export default function Footer() {
               Committed to journalistic excellence and integrity.
             </p>
             <div className="social-links">
-              <a href="#" aria-label="Social"><Share2 size={20} /></a>
-              <a href="#" aria-label="Social"><MessageSquare size={20} /></a>
-              <a href="#" aria-label="Social"><Mail size={20} /></a>
+              <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
+              <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
+              <a href="#" aria-label="Instagram"><Instagram size={20} /></a>
             </div>
           </div>
 
