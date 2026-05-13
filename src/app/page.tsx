@@ -54,7 +54,7 @@ export default async function Home() {
         {featuredArticle ? (
           <div className="featured-article-stacked">
             <Link href={`/${featuredCleanSlug}`} style={{ display: 'block' }}>
-              <div style={{ position: 'relative', width: '100%', height: '450px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', marginBottom: '1.25rem', background: 'var(--bg-offset)' }}>
+              <div className="featured-article-img-wrap" style={{ position: 'relative', width: '100%', borderRadius: 'var(--radius-lg)', overflow: 'hidden', marginBottom: '1.25rem', background: 'var(--bg-offset)' }}>
                 <Image 
                   src={featuredArticle.image || '/placeholder.jpg'} 
                   alt={featuredArticle.title}
