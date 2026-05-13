@@ -38,7 +38,7 @@ export default function AdminDashboard() {
     status: 'pending',
     metaTitle: '',
     metaDescription: '',
-    category: 'General',
+    category: 'Politics',
     author: 'Staff Reporter'
   };
 
@@ -152,7 +152,7 @@ export default function AdminDashboard() {
       status: article.status || 'pending',
       metaTitle: article.metaTitle || '',
       metaDescription: article.metaDescription || '',
-      category: article.category || 'General',
+      category: article.category && article.category !== 'General' ? article.category : 'Politics',
       author: article.author || 'Staff Reporter'
     });
     setEditingId(article._id);
@@ -336,6 +336,19 @@ export default function AdminDashboard() {
                         <select name="status" value={formData.status} onChange={handleInputChange}>
                           <option value="pending">Pending</option>
                           <option value="published">Published</option>
+                        </select>
+                      </div>
+                      <div className="status-item" style={{ marginTop: '1rem' }}>
+                        <label>Category:</label>
+                        <select name="category" value={formData.category} onChange={handleInputChange}>
+                          <option value="Politics">Politics</option>
+                          <option value="Business">Business</option>
+                          <option value="Metro">Metro</option>
+                          <option value="Sports">Sports</option>
+                          <option value="Entertainment">Entertainment</option>
+                          <option value="Tech">Tech</option>
+                          <option value="Opinion">Opinion</option>
+                          <option value="News">News</option>
                         </select>
                       </div>
                       <button onClick={() => handleSaveArticle(false)} disabled={isSaving} className="btn w-full mt-4" style={{ background: '#e5e7eb', color: '#111827', border: '1px solid #d1d5db' }}>

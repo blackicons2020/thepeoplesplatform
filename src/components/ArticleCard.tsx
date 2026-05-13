@@ -8,7 +8,7 @@ interface ArticleCardProps {
 }
 
 export default function ArticleCard({ article, featured }: ArticleCardProps) {
-  const category = article.category || 'News';
+  const category = article.category && article.category !== 'General' ? article.category : 'News';
   const cleanSlugForLink = (article.slug || '').replace(/-\d{13}$/, '');
   const href = `/${cleanSlugForLink}`;
 

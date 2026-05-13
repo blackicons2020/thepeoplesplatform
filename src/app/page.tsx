@@ -27,7 +27,7 @@ export default async function Home() {
   const featuredCleanSlug = featuredArticle ? (featuredArticle.slug || '').replace(/-\d{13}$/, '') : '';
 
   return (
-    <div className="container py-8">
+    <div className="container py-8" style={{ marginTop: '2rem' }}>
       {/* Schema.org for Organization */}
       <script
         type="application/ld+json"
@@ -47,7 +47,7 @@ export default async function Home() {
                   priority
                 />
                 <span className="badge" style={{ position: 'absolute', bottom: '1.25rem', left: '1.25rem', zIndex: 10, background: '#006B3F', color: 'white', padding: '0.35rem 1rem', fontSize: '0.75rem', fontWeight: 800, borderRadius: '9999px', textTransform: 'uppercase' }}>
-                  {featuredArticle.category || 'GENERAL'}
+                  {featuredArticle.category && featuredArticle.category !== 'General' ? featuredArticle.category : 'NEWS'}
                 </span>
               </div>
               <h2 style={{ fontSize: '1.875rem', fontWeight: 800, lineHeight: 1.25, marginBottom: '0.75rem', color: 'var(--text-main)', fontFamily: 'var(--font-serif)' }}>
@@ -74,8 +74,8 @@ export default async function Home() {
           <div className="empty-state">No articles published yet. Check your database connection.</div>
         )}
 
-        <div className="hero-ad-slot" style={{ height: '100%', minHeight: '400px', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ background: 'var(--bg-offset)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '2rem', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <div className="hero-ad-slot" style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: 'var(--bg-offset)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '250px', maxHeight: '300px' }}>
             <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1.5rem' }}>
               - Sponsored Advertisement -
             </span>
