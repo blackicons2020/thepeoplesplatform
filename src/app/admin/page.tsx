@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LayoutGrid, PenTool, Shield, Search, Trash2, Loader2, Megaphone, CheckCircle, XCircle } from 'lucide-react';
+import { LayoutGrid, PenTool, Shield, Search, Trash2, Loader2, Megaphone, CheckCircle, XCircle, Edit } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('articles');
@@ -59,6 +59,7 @@ export default function AdminDashboard() {
     adImage: ''
   };
   const [adFormData, setAdFormData] = useState(initialAdFormState);
+  const [editingAdId, setEditingAdId] = useState<string | null>(null);
 
   const fetchAdverts = async () => {
     setIsAdLoading(true);
@@ -121,14 +122,17 @@ export default function AdminDashboard() {
   const handleSaveDirectAd = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/adverts', {
-        method: 'POST',
+      const url = editingAdId ? `/api/adverts/${editingAdId}` : '/api/adverts';
+      const method = editingAdId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adFormData),
       });
       const data = await res.json();
       if (data.success) {
         setAdFormData(initialAdFormState);
+        setEditingAdId(null);
         setShowDirectAdForm(false);
         fetchAdverts();
       } else {
@@ -137,6 +141,23 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Failed to save direct ad:', error);
     }
+  };
+
+  const handleEditAdClick = (ad: any) => {
+    setEditingAdId(ad._id);
+    setAdFormData({
+      clientName: ad.clientName || '',
+      email: ad.email || '',
+      plan: ad.plan || 'Homepage Banner',
+      amount: ad.amount || 0,
+      status: ad.status || 'active',
+      adHeadline: ad.adHeadline || '',
+      adContent: ad.adContent || '',
+      adUrl: ad.adUrl || '',
+      adImage: ad.adImage || ''
+    });
+    setShowDirectAdForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleUpdateAdStatus = async (id: string, newStatus: string) => {
@@ -513,7 +534,14 @@ export default function AdminDashboard() {
 
               {showDirectAdForm && (
                 <form onSubmit={handleSaveDirectAd} style={{ background: 'white', padding: '1.5rem', borderRadius: '0.5rem', border: '1px solid var(--border)', marginBottom: '2rem' }}>
-                  <h4 style={{ marginBottom: '1rem' }}>Direct Advert Submission</h4>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h4>{editingAdId ? 'Edit Advertisement Details' : 'Direct Advert Submission'}</h4>
+                    {editingAdId && (
+                      <button type="button" onClick={() => { setEditingAdId(null); setAdFormData(initialAdFormState); }} style={{ fontSize: '0.75rem', color: 'var(--primary)', textDecoration: 'underline' }}>
+                        Cancel Edit
+                      </button>
+                    )}
+                  </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                     <div>
                       <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, marginBottom: '0.25rem' }}>Client Name</label>
@@ -547,7 +575,7 @@ export default function AdminDashboard() {
                       <img src={adFormData.adImage} alt="preview" style={{ maxHeight: '100px', marginTop: '0.5rem', borderRadius: '0.25rem' }} />
                     )}
                   </div>
-                  <button type="submit" className="btn btn-primary">Publish Direct Advert</button>
+                  <button type="submit" className="btn btn-primary">{editingAdId ? 'Update Advertisement' : 'Publish Direct Advert'}</button>
                 </form>
               )}
 
@@ -600,9 +628,14 @@ export default function AdminDashboard() {
                               </select>
                             </td>
                             <td>
-                              <button onClick={() => handleDeleteAd(ad._id)} className="icon-btn" style={{ color: '#ef4444' }} title="Delete Advert">
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <button onClick={() => handleEditAdClick(ad)} className="icon-btn" style={{ color: '#3b82f6' }} title="Edit Advert">
+                                  <Edit className="w-4 h-4" />
+                                </button>
+                                <button onClick={() => handleDeleteAd(ad._id)} className="icon-btn" style={{ color: '#ef4444' }} title="Delete Advert">
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))
