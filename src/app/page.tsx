@@ -53,6 +53,11 @@ export default async function Home() {
               <h2 style={{ fontSize: '1.875rem', fontWeight: 800, lineHeight: 1.25, marginBottom: '0.75rem', color: 'var(--text-main)', fontFamily: 'var(--font-serif)' }}>
                 {featuredArticle.title}
               </h2>
+              {featuredArticle.subHeadline && (
+                <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
+                  {featuredArticle.subHeadline}
+                </p>
+              )}
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>

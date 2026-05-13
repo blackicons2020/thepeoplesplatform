@@ -21,7 +21,7 @@ export default function AdminDashboard() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordInput === 'Admin2026') {
+    if (passwordInput.trim() === 'Admin2026') {
       setIsAuthenticated(true);
       localStorage.setItem('admin_auth', 'true');
       setAuthError('');
@@ -232,8 +232,15 @@ export default function AdminDashboard() {
       <main className="admin-content">
         <header className="content-header">
           <h2>{activeTab === 'articles' ? 'All Articles' : (editingId ? 'Edit Story' : 'Compose Story')}</h2>
-          <div className="user-profile">
+          <div className="user-profile" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <span>Admin</span>
+            <button 
+              onClick={() => { localStorage.removeItem('admin_auth'); setIsAuthenticated(false); }}
+              className="btn btn-primary"
+              style={{ padding: '0.25rem 0.75rem', fontSize: '0.75rem' }}
+            >
+              Logout
+            </button>
           </div>
         </header>
 

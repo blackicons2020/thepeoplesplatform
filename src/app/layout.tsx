@@ -20,6 +20,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@thepeoplesplatform',
   },
+  icons: {
+    icon: '/icon.svg',
+    apple: '/icon.svg',
+  },
   robots: {
     index: true,
     follow: true,

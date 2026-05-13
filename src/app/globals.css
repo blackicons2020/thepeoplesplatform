@@ -149,7 +149,7 @@ ul {
 }
 
 .hide-desktop {
-  display: none;
+  display: none !important;
 }
 .menu-toggle {
   background: none;
@@ -388,8 +388,8 @@ ul {
 }
 @media (max-width: 768px) {
   .header-top { height: 60px; }
-  .hide-mobile { display: none; }
-  .hide-desktop { display: block; }
+  .hide-mobile { display: none !important; }
+  .hide-desktop { display: flex !important; }
   .main-nav { display: none; border-bottom: 1px solid var(--border); }
   .main-nav.open { display: block; position: absolute; top: 60px; left: 0; right: 0; z-index: 999; background: var(--bg-main); }
   .search-form input { width: 100px; }

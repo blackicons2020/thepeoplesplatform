@@ -26,6 +26,7 @@ export default function Footer() {
               <li><Link href="/contact">Contact</Link></li>
               <li><Link href="/advertise">Advertise</Link></li>
               <li><Link href="/authors">Our Authors</Link></li>
+              <li><Link href="/submit-news" style={{ color: 'var(--primary)', fontWeight: 600 }}>Submit News / Tip</Link></li>
             </ul>
           </div>
 
@@ -36,13 +37,12 @@ export default function Footer() {
               <li><Link href="/privacy-policy">Privacy Policy</Link></li>
               <li><Link href="/terms">Terms of Service</Link></li>
               <li><Link href="/corrections-policy">Corrections</Link></li>
-              <li><Link href="/submit-news" style={{ color: 'var(--primary)', fontWeight: 600 }}>Submit News / Tip</Link></li>
             </ul>
           </div>
 
           <div className="footer-newsletter">
-            <h3>Stay Informed</h3>
-            <p>Get the latest headlines delivered to your inbox.</p>
+            <h3>Stay Connected</h3>
+            <p>Stay Informed with latest Headlines?</p>
             <div className="social-links" style={{ marginBottom: '1.5rem' }}>
               <a href="#" aria-label="Twitter">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
