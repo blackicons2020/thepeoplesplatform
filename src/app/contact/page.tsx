@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Send, Upload, X } from 'lucide-react';
+import { Mail, Send, Upload, X } from 'lucide-react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -105,29 +105,6 @@ export default function ContactPage() {
                 <div>
                   <h4 style={{ fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>Email Us</h4>
                   <p style={{ fontWeight: 700, fontSize: '1.125rem' }}>theplatformreport@gmail.com</p>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <div style={{ width: '40px', height: '40px', background: 'var(--bg-offset)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', flexShrink: 0 }}>
-                  <MapPin size={20} />
-                </div>
-                <div>
-                  <h4 style={{ fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>Headquarters</h4>
-                  <p style={{ fontWeight: 700, fontSize: '1.125rem', lineHeight: 1.4 }}>
-                    Plot 157, Yakubu Gowon Crescent, Asokoro, FCT, Abuja, Nigeria.
-                  </p>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <div style={{ width: '40px', height: '40px', background: 'var(--bg-offset)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', flexShrink: 0 }}>
-                  <Phone size={20} />
-                </div>
-                <div>
-                  <h4 style={{ fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>Call Us</h4>
-                  <p style={{ fontWeight: 700, fontSize: '1.125rem' }}>Available for verified tips.</p>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Contact via email first for security.</p>
                 </div>
               </div>
             </div>
