@@ -57,7 +57,7 @@ export default function ContactPage() {
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               <div style={{ display: 'flex', gap: '1rem' }}>
-                <div style={{ width: '40px', height: '40px', background: 'var(--bg-offset)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justify-content: 'center', color: 'var(--primary)', flexShrink: 0 }}>
+                <div style={{ width: '40px', height: '40px', background: 'var(--bg-offset)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', flexShrink: 0 }}>
                   <Mail size={20} />
                 </div>
                 <div>
@@ -68,7 +68,7 @@ export default function ContactPage() {
               </div>
 
               <div style={{ display: 'flex', gap: '1rem' }}>
-                <div style={{ width: '40px', height: '40px', background: 'var(--bg-offset)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justify-content: 'center', color: 'var(--primary)', flexShrink: 0 }}>
+                <div style={{ width: '40px', height: '40px', background: 'var(--bg-offset)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', flexShrink: 0 }}>
                   <MapPin size={20} />
                 </div>
                 <div>
@@ -79,7 +79,7 @@ export default function ContactPage() {
               </div>
 
               <div style={{ display: 'flex', gap: '1rem' }}>
-                <div style={{ width: '40px', height: '40px', background: 'var(--bg-offset)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justify-content: 'center', color: 'var(--primary)', flexShrink: 0 }}>
+                <div style={{ width: '40px', height: '40px', background: 'var(--bg-offset)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', flexShrink: 0 }}>
                   <Phone size={20} />
                 </div>
                 <div>
