@@ -5,6 +5,7 @@ const supportSchema = new Schema({
   email: { type: String, required: true },
   subject: String,
   message: { type: String, required: true },
+  attachment: { type: String, default: '' },
   status: { type: String, enum: ['unread', 'read', 'replied'], default: 'unread' },
   reply: { type: String, default: '' },
   replyDate: Date

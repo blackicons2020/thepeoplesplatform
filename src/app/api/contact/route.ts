@@ -4,7 +4,7 @@ import SupportMessage from '@/models/SupportMessage';
 
 export async function POST(req: Request) {
   try {
-    const { name, email, subject, message } = await req.json();
+    const { name, email, subject, message, attachment } = await req.json();
 
     if (!name || !email || !message) {
       return NextResponse.json({ error: 'Please fill in all required fields.' }, { status: 400 });
@@ -17,6 +17,7 @@ export async function POST(req: Request) {
       email,
       subject: subject || 'General Inquiry',
       message,
+      attachment: attachment || '',
       status: 'unread'
     });
 

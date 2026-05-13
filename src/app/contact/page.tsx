@@ -1,17 +1,59 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Upload, X } from 'lucide-react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
+    attachment: ''
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [responseMsg, setResponseMsg] = useState('');
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height = Math.round((height * MAX_WIDTH) / width);
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width = Math.round((width * MAX_HEIGHT) / height);
+              height = MAX_HEIGHT;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const compressedBase64 = canvas.toDataURL('image/webp', 0.75);
+            setFormData(prev => ({ ...prev, attachment: compressedBase64 }));
+          }
+        };
+        img.src = event.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +71,7 @@ export default function ContactPage() {
       if (res.ok) {
         setStatus('success');
         setResponseMsg(data.message);
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setFormData({ name: '', email: '', subject: '', message: '', attachment: '' });
       } else {
         setStatus('error');
         setResponseMsg(data.error || 'Something went wrong.');
@@ -44,7 +86,7 @@ export default function ContactPage() {
     <div className="container py-16 max-w-6xl">
       <div className="text-center mb-16">
         <h1 className="article-title" style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>Get in Touch</h1>
-        <p className="article-subheadline" style={{ maxWidth: '700px', margin: '0 auto' }}>
+        <p className="article-subheadline" style={{ maxWidth: 'none', margin: '0 auto' }}>
           Have a news tip, a correction, or an advertising inquiry? Our team is ready to listen and respond.
         </p>
       </div>
@@ -63,7 +105,6 @@ export default function ContactPage() {
                 <div>
                   <h4 style={{ fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>Email Us</h4>
                   <p style={{ fontWeight: 700, fontSize: '1.125rem' }}>theplatformreport@gmail.com</p>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>newsroom@thepeoplesplatform.online</p>
                 </div>
               </div>
 
@@ -73,8 +114,9 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 style={{ fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>Headquarters</h4>
-                  <p style={{ fontWeight: 700, fontSize: '1.125rem' }}>Lagos, Nigeria</p>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Serving a global audience.</p>
+                  <p style={{ fontWeight: 700, fontSize: '1.125rem', lineHeight: 1.4 }}>
+                    Plot 157, Yakubu Gowon Crescent, Asokoro, FCT, Abuja, Nigeria.
+                  </p>
                 </div>
               </div>
 
@@ -94,7 +136,7 @@ export default function ContactPage() {
           <div style={{ padding: '2rem', background: 'var(--primary)', borderRadius: 'var(--radius-md)', color: 'white' }}>
             <h3 style={{ marginBottom: '1rem' }}>Submit a News Tip</h3>
             <p style={{ fontSize: '0.875rem', lineHeight: 1.6, opacity: 0.9 }}>
-              Do you have information the public needs to know? We guarantee source protection for verified whistleblowers and tipsters.
+              Do you have information the public needs to know? We guarantee source protection for verified whistleblowers and tipsters. Use the form to attach supporting documents or images.
             </p>
           </div>
         </div>
@@ -147,8 +189,34 @@ export default function ContactPage() {
                 value={formData.message}
                 onChange={e => setFormData({ ...formData, message: e.target.value })}
                 placeholder="How can we help you?"
-                style={{ height: '200px' }}
+                style={{ height: '150px' }}
               ></textarea>
+            </div>
+
+            <div className="field mt-4">
+              <label>Attach Image / Proof</label>
+              <div style={{ position: 'relative' }}>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageUpload} 
+                  style={{ display: 'block', width: '100%', padding: '0.75rem', border: '1px dashed var(--border)', borderRadius: '0.5rem', background: 'var(--bg-main)', cursor: 'pointer' }} 
+                />
+                <Upload size={18} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.5 }} />
+              </div>
+              
+              {formData.attachment && (
+                <div style={{ marginTop: '1rem', position: 'relative', width: '100px', height: '100px', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                  <img src={formData.attachment} alt="Upload Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button 
+                    type="button"
+                    onClick={() => setFormData({ ...formData, attachment: '' })}
+                    style={{ position: 'absolute', top: '0.25rem', right: '0.25rem', background: 'rgba(0,0,0,0.5)', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              )}
             </div>
 
             <button 
