@@ -115,9 +115,8 @@ export default async function ArticlePage({ params }: PageProps) {
           />
         </div>
 
-        {/* 2. Category Tag directly below image */}
         <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
-          <span className="badge badge-primary" style={{ display: 'inline-block', fontSize: '0.75rem', fontWeight: 800, padding: '0.35rem 0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <span className="badge badge-primary" style={{ display: 'inline-block', fontSize: '0.65rem', fontWeight: 800, padding: '0.2rem 0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             {article.category}
           </span>
         </div>

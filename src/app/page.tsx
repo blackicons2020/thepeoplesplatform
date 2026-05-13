@@ -62,7 +62,7 @@ export default async function Home() {
                   style={{ objectFit: 'cover', objectPosition: 'top' }}
                   priority
                 />
-                <span className="badge" style={{ position: 'absolute', bottom: '1.25rem', left: '1.25rem', zIndex: 10, background: '#006B3F', color: 'white', padding: '0.35rem 1rem', fontSize: '0.75rem', fontWeight: 800, borderRadius: '9999px', textTransform: 'uppercase' }}>
+                <span className="badge" style={{ position: 'absolute', bottom: '1.25rem', left: '1.25rem', zIndex: 10, background: '#006B3F', color: 'white', padding: '0.2rem 0.75rem', fontSize: '0.65rem', fontWeight: 800, borderRadius: '9999px', textTransform: 'uppercase' }}>
                   {featuredArticle.category && featuredArticle.category !== 'General' ? featuredArticle.category : 'NEWS'}
                 </span>
               </div>

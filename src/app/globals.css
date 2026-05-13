@@ -346,9 +346,9 @@ ul {
 
 .badge {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
+  padding: 0.15rem 0.5rem;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -377,14 +377,14 @@ ul {
 }
 
 .category-tag {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 800;
   background: var(--primary);
   color: #FFFFFF;
-  padding: 0.35rem 1rem;
+  padding: 0.2rem 0.75rem;
   border-radius: 9999px;
   text-transform: uppercase;
-  margin: 0.75rem 0 0.5rem;
+  margin: 0.5rem 0 0.25rem;
   display: inline-block;
   letter-spacing: 0.05em;
   width: fit-content;
@@ -450,6 +450,8 @@ ul {
 .policy-section { margin-bottom: 3rem; }
 .policy-section h2 { font-family: var(--font-sans); font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--primary); }
 .policy-section p { font-size: 1.125rem; line-height: 1.7; color: var(--text-main); }
+.policy-section ul { margin: 1.5rem 0; padding-left: 1.5rem; }
+.policy-section ul li { list-style: disc; margin-bottom: 0.75rem; font-size: 1.125rem; color: var(--text-main); line-height: 1.6; }
 
 /* Advertise Page */
 .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
