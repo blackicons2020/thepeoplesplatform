@@ -74,13 +74,21 @@ export default async function Home() {
           <div className="empty-state">No articles published yet. Check your database connection.</div>
         )}
 
-        <div className="hero-ad-slot" style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ background: 'var(--bg-offset)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '250px', maxHeight: '300px' }}>
-            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1.5rem' }}>
-              - Sponsored Advertisement -
+        <div className="hero-ad-slot" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div style={{ background: 'var(--bg-offset)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '220px', flex: 1 }}>
+            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1rem' }}>
+              - Premium Sponsor Slot 1 -
             </span>
-            <div style={{ color: 'var(--text-muted)', fontWeight: 600, fontSize: '1rem' }}>
-              <p>Your Banner Ad Here &bull; <a href="/advertise" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Advertise with us</a></p>
+            <div style={{ color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.95rem' }}>
+              <p>Top Impact Banner &bull; <a href="/advertise" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Advertise</a></p>
+            </div>
+          </div>
+          <div style={{ background: 'var(--bg-offset)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '220px', flex: 1 }}>
+            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1rem' }}>
+              - Premium Sponsor Slot 2 -
+            </span>
+            <div style={{ color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.95rem' }}>
+              <p>Standard Banner Ad &bull; <a href="/advertise" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Advertise</a></p>
             </div>
           </div>
         </div>

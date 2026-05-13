@@ -21,6 +21,47 @@ export default function AdvertisePage() {
   });
   const [loading, setLoading] = useState(false);
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height = Math.round((height * MAX_WIDTH) / width);
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width = Math.round((width * MAX_HEIGHT) / height);
+              height = MAX_HEIGHT;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const compressedBase64 = canvas.toDataURL('image/webp', 0.75);
+            setFormData(prev => ({ ...prev, adImage: compressedBase64 }));
+          }
+        };
+        img.src = event.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handlePayment = () => {
     if (!formData.clientName || !formData.email || !selectedPlan) {
       alert('Please fill in required fields.');
@@ -117,6 +158,19 @@ export default function AdvertisePage() {
           <div className="field mt-4">
             <label>Ad Content</label>
             <textarea value={formData.adContent} onChange={e => setFormData({...formData, adContent: e.target.value})}></textarea>
+          </div>
+          <div className="field mt-4">
+            <label>Target Link / URL</label>
+            <input type="text" placeholder="https://example.com" value={formData.adUrl} onChange={e => setFormData({...formData, adUrl: e.target.value})} />
+          </div>
+          <div className="field mt-4">
+            <label>Upload Ad Image / Material</label>
+            <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'block', width: '100%', padding: '0.75rem', border: '1px dashed var(--border)', borderRadius: '0.5rem', background: 'var(--bg-offset)', cursor: 'pointer' }} />
+            {formData.adImage && (
+              <div style={{ marginTop: '1rem', width: '100%', height: '150px', position: 'relative', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                <img src={formData.adImage} alt="Ad Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', background: '#000' }} />
+              </div>
+            )}
           </div>
           <button 
             className="btn btn-primary w-full mt-8" 

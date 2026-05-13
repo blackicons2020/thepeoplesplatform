@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import connectDB from '@/lib/db';
 import Article from '@/models/Article';
 
@@ -29,6 +30,11 @@ export async function POST(request: Request) {
 
     const article = new Article(data);
     await article.save();
+    try {
+      revalidatePath('/');
+    } catch (e) {
+      console.error("Revalidation error:", e);
+    }
     return NextResponse.json({ success: true, article });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

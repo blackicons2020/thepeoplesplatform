@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LayoutGrid, PenTool, Shield, Search, Trash2, Loader2 } from 'lucide-react';
+import { LayoutGrid, PenTool, Shield, Search, Trash2, Loader2, Megaphone, CheckCircle, XCircle } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('articles');
@@ -43,6 +43,130 @@ export default function AdminDashboard() {
   };
 
   const [formData, setFormData] = useState(initialFormState);
+
+  const [adverts, setAdverts] = useState<any[]>([]);
+  const [isAdLoading, setIsAdLoading] = useState(false);
+  const [showDirectAdForm, setShowDirectAdForm] = useState(false);
+  const initialAdFormState = {
+    clientName: 'Admin Direct Post',
+    email: 'admin@thepeoplesplatform.online',
+    plan: 'Homepage Banner',
+    amount: 0,
+    status: 'active',
+    adHeadline: '',
+    adContent: '',
+    adUrl: '',
+    adImage: ''
+  };
+  const [adFormData, setAdFormData] = useState(initialAdFormState);
+
+  const fetchAdverts = async () => {
+    setIsAdLoading(true);
+    try {
+      const res = await fetch('/api/adverts');
+      const data = await res.json();
+      if (data.success) {
+        setAdverts(data.adverts);
+      }
+    } catch (error) {
+      console.error('Failed to fetch adverts:', error);
+    } finally {
+      setIsAdLoading(false);
+    }
+  };
+
+  const handleAdInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setAdFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAdImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height = Math.round((height * MAX_WIDTH) / width);
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width = Math.round((width * MAX_HEIGHT) / height);
+              height = MAX_HEIGHT;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const compressedBase64 = canvas.toDataURL('image/webp', 0.75);
+            setAdFormData(prev => ({ ...prev, adImage: compressedBase64 }));
+          }
+        };
+        img.src = event.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveDirectAd = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/adverts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(adFormData),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setAdFormData(initialAdFormState);
+        setShowDirectAdForm(false);
+        fetchAdverts();
+      } else {
+        alert('Failed to save ad: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Failed to save direct ad:', error);
+    }
+  };
+
+  const handleUpdateAdStatus = async (id: string, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/adverts/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchAdverts();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDeleteAd = async (id: string) => {
+    if (!confirm('Delete this advert permanently?')) return;
+    try {
+      const res = await fetch(`/api/adverts/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        fetchAdverts();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   useEffect(() => {
     fetchArticles();
@@ -226,12 +350,18 @@ export default function AdminDashboard() {
           >
             <PenTool className="w-5 h-5" /> New Story
           </button>
+          <button 
+            className={activeTab === 'adverts' ? 'active' : ''} 
+            onClick={() => { setActiveTab('adverts'); fetchAdverts(); }}
+          >
+            <Megaphone className="w-5 h-5" /> Adverts
+          </button>
         </nav>
       </aside>
 
       <main className="admin-content">
         <header className="content-header">
-          <h2>{activeTab === 'articles' ? 'All Articles' : (editingId ? 'Edit Story' : 'Compose Story')}</h2>
+          <h2>{activeTab === 'articles' ? 'All Articles' : activeTab === 'adverts' ? 'Manage Adverts' : (editingId ? 'Edit Story' : 'Compose Story')}</h2>
           <div className="user-profile" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <span>Admin</span>
             <button 
@@ -305,7 +435,7 @@ export default function AdminDashboard() {
                 </table>
               )}
             </div>
-          ) : (
+          ) : activeTab === 'compose' ? (
             <div className="compose-form">
               <div className="form-grid">
                 <div className="form-main">
@@ -346,7 +476,7 @@ export default function AdminDashboard() {
                           <option value="Metro">Metro</option>
                           <option value="Sports">Sports</option>
                           <option value="Entertainment">Entertainment</option>
-                          <option value="Tech">Tech</option>
+                          <option value="Technology">Technology</option>
                           <option value="Opinion">Opinion</option>
                           <option value="News">News</option>
                         </select>
@@ -372,7 +502,117 @@ export default function AdminDashboard() {
                 </aside>
               </div>
             </div>
-          )}
+          ) : activeTab === 'adverts' ? (
+            <div className="adverts-management">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <h3>Submitted & Active Advertisements</h3>
+                <button className="btn btn-primary" onClick={() => setShowDirectAdForm(!showDirectAdForm)}>
+                  {showDirectAdForm ? 'Close Form' : 'Post Advert Directly (No Fee)'}
+                </button>
+              </div>
+
+              {showDirectAdForm && (
+                <form onSubmit={handleSaveDirectAd} style={{ background: 'white', padding: '1.5rem', borderRadius: '0.5rem', border: '1px solid var(--border)', marginBottom: '2rem' }}>
+                  <h4 style={{ marginBottom: '1rem' }}>Direct Advert Submission</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, marginBottom: '0.25rem' }}>Client Name</label>
+                      <input type="text" name="clientName" value={adFormData.clientName} onChange={handleAdInputChange} style={{ width: '100%', padding: '0.5rem', border: '1px solid var(--border)', borderRadius: '0.25rem' }} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, marginBottom: '0.25rem' }}>Plan / Location</label>
+                      <select name="plan" value={adFormData.plan} onChange={handleAdInputChange} style={{ width: '100%', padding: '0.5rem', border: '1px solid var(--border)', borderRadius: '0.25rem' }}>
+                        <option value="Homepage Banner">Homepage Banner</option>
+                        <option value="Article Page Ad">Article Page Ad</option>
+                        <option value="Sponsored Article">Sponsored Article</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, marginBottom: '0.25rem' }}>Headline</label>
+                    <input type="text" name="adHeadline" value={adFormData.adHeadline} onChange={handleAdInputChange} style={{ width: '100%', padding: '0.5rem', border: '1px solid var(--border)', borderRadius: '0.25rem' }} />
+                  </div>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, marginBottom: '0.25rem' }}>Ad Content</label>
+                    <textarea name="adContent" value={adFormData.adContent} onChange={handleAdInputChange} rows={3} style={{ width: '100%', padding: '0.5rem', border: '1px solid var(--border)', borderRadius: '0.25rem' }}></textarea>
+                  </div>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, marginBottom: '0.25rem' }}>Target URL</label>
+                    <input type="text" name="adUrl" placeholder="https://example.com" value={adFormData.adUrl} onChange={handleAdInputChange} style={{ width: '100%', padding: '0.5rem', border: '1px solid var(--border)', borderRadius: '0.25rem' }} />
+                  </div>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, marginBottom: '0.25rem' }}>Ad Image</label>
+                    <input type="file" accept="image/*" onChange={handleAdImageUpload} style={{ display: 'block', width: '100%' }} />
+                    {adFormData.adImage && (
+                      <img src={adFormData.adImage} alt="preview" style={{ maxHeight: '100px', marginTop: '0.5rem', borderRadius: '0.25rem' }} />
+                    )}
+                  </div>
+                  <button type="submit" className="btn btn-primary">Publish Direct Advert</button>
+                </form>
+              )}
+
+              {isAdLoading ? (
+                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading adverts...</div>
+              ) : (
+                <div style={{ background: 'white', borderRadius: '0.5rem', border: '1px solid var(--border)', overflow: 'hidden' }}>
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Client / Plan</th>
+                        <th>Details</th>
+                        <th>Media</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {adverts.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>No advertisements found.</td>
+                        </tr>
+                      ) : (
+                        adverts.map(ad => (
+                          <tr key={ad._id}>
+                            <td>
+                              <div style={{ fontWeight: 700 }}>{ad.clientName}</div>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{ad.plan}</div>
+                              {ad.amount > 0 && <div style={{ fontSize: '0.75rem', color: 'var(--primary)' }}>₦{ad.amount.toLocaleString()}</div>}
+                            </td>
+                            <td>
+                              {ad.adHeadline && <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>{ad.adHeadline}</div>}
+                              {ad.adContent && <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{ad.adContent}</div>}
+                              {ad.adUrl && <a href={ad.adUrl} target="_blank" rel="noreferrer" style={{ fontSize: '0.75rem', color: '#3b82f6', textDecoration: 'underline' }}>{ad.adUrl}</a>}
+                            </td>
+                            <td>
+                              {ad.adImage ? (
+                                <img src={ad.adImage} alt="Ad media" style={{ width: '80px', height: '50px', objectFit: 'contain', background: '#f3f4f6', borderRadius: '0.25rem' }} />
+                              ) : 'None'}
+                            </td>
+                            <td>
+                              <select 
+                                value={ad.status || 'pending'} 
+                                onChange={(e) => handleUpdateAdStatus(ad._id, e.target.value)}
+                                style={{ padding: '0.25rem', borderRadius: '0.25rem', border: '1px solid var(--border)', fontSize: '0.75rem' }}
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="active">Active</option>
+                                <option value="rejected">Rejected</option>
+                              </select>
+                            </td>
+                            <td>
+                              <button onClick={() => handleDeleteAd(ad._id)} className="icon-btn" style={{ color: '#ef4444' }} title="Delete Advert">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          ) : null}
         </section>
       </main>
     </div>
