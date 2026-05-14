@@ -466,7 +466,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="field" style={{ marginBottom: '1.5rem' }}>
                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>Writer / Author Name</label>
-                    <input name="author" value={formData.author} onChange={handleInputChange} type="text" placeholder="e.g. John Doe" style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', outline: 'none' }} />
+                    <input name="author" value={formData.author} onChange={handleInputChange} type="text" placeholder="e.g. John Doe" style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', outline: 'none', color: '#1f2937' }} />
                   </div>
                   <div className="field" style={{ marginBottom: '2rem' }}>
                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>Article Image</label>

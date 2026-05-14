@@ -445,6 +445,18 @@ ul {
 .seo-field { margin-top: 1rem; }
 .seo-field label { display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.25rem; }
 .seo-field input, .seo-field textarea { width: 100%; border: 1px solid #e5e7eb; border-radius: 0.25rem; padding: 0.5rem; font-size: 0.875rem; }
+
+.admin-container input, 
+.admin-container textarea,
+.admin-container select,
+.admin-container .title-input,
+.admin-container .field input,
+.admin-container .field textarea,
+.admin-container .seo-field input,
+.admin-container .seo-field textarea {
+  color: #1f2937 !important;
+}
+
 .w-full { width: 100%; }
 
 .policy-section { margin-bottom: 3rem; }
