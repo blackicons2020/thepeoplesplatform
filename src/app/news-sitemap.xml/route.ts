@@ -14,7 +14,7 @@ export async function GET() {
     date: { $gte: twoDaysAgo }
   }).sort({ date: -1 }).limit(1000).lean();
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://thepeoplesplatform.online";
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.thepeoplesplatform.online";
   const SITE_NAME = "The People's Platform";
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

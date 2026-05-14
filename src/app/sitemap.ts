@@ -3,7 +3,7 @@ import connectDB from '@/lib/db';
 import Article from '@/models/Article';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://thepeoplesplatform.online";
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.thepeoplesplatform.online";
   
   try {
     await connectDB();
