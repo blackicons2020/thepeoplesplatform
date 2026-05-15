@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Menu, Search, Globe, Sun, Moon, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Menu, Search, Globe, Sun, Moon, X, ChevronRight } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 
 const CATEGORIES = [
   'Politics', 'Metro', 'Business', 'Economy', 'Technology', 'Sports', 
@@ -16,6 +16,13 @@ export default function Header() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const scrollRef = useRef<HTMLUListElement>(null);
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -87,8 +94,8 @@ export default function Header() {
       </div>
 
       <nav className={`main-nav ${isMenuOpen ? 'open' : ''}`}>
-        <div className="container">
-          <ul className="nav-links">
+        <div className="container nav-container">
+          <ul className="nav-links" ref={scrollRef}>
             {CATEGORIES.map(cat => (
               <li key={cat}>
                 <Link href={`/news/${cat.toLowerCase()}`} onClick={() => setIsMenuOpen(false)}>
@@ -97,6 +104,9 @@ export default function Header() {
               </li>
             ))}
           </ul>
+          <button className="nav-scroll-btn hide-mobile" onClick={scrollRight} title="Show more categories">
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
       </nav>
     </header>

@@ -112,6 +112,32 @@ ul {
   background: var(--bg-offset);
   border-bottom: 1px solid var(--border);
 }
+.nav-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.nav-scroll-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  background: linear-gradient(to right, transparent, var(--bg-offset) 60%);
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0.5rem;
+  z-index: 5;
+  transition: all 0.2s;
+}
+.nav-scroll-btn:hover {
+  color: var(--primary);
+  padding-right: 0.25rem;
+}
 .nav-links {
   display: flex;
   gap: 2rem;
