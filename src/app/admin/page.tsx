@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { LayoutGrid, PenTool, Shield, Search, Trash2, Loader2, Megaphone, CheckCircle, XCircle, Edit } from 'lucide-react';
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('articles');
   const [articles, setArticles] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -398,7 +400,11 @@ export default function AdminDashboard() {
           <div className="user-profile" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <span>Admin</span>
             <button 
-              onClick={() => { localStorage.removeItem('admin_auth'); setIsAuthenticated(false); }}
+              onClick={() => { 
+                localStorage.removeItem('admin_auth'); 
+                setIsAuthenticated(false);
+                router.push('/');
+              }}
               className="btn btn-primary"
               style={{ padding: '0.25rem 0.75rem', fontSize: '0.75rem' }}
             >
