@@ -213,44 +213,56 @@ export default function AdminDashboard() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const processImage = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        
+        const MAX_WIDTH = 1200;
+        const MAX_HEIGHT = 1200;
+        
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width = Math.round((width * MAX_HEIGHT) / height);
+            height = MAX_HEIGHT;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedBase64 = canvas.toDataURL('image/webp', 0.75);
+          setFormData(prev => ({ ...prev, image: compressedBase64 }));
+        }
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          
-          const MAX_WIDTH = 1200;
-          const MAX_HEIGHT = 1200;
-          
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height = Math.round((height * MAX_WIDTH) / width);
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width = Math.round((width * MAX_HEIGHT) / height);
-              height = MAX_HEIGHT;
-            }
-          }
-          
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.drawImage(img, 0, 0, width, height);
-            const compressedBase64 = canvas.toDataURL('image/webp', 0.75);
-            setFormData(prev => ({ ...prev, image: compressedBase64 }));
-          }
-        };
-        img.src = event.target?.result as string;
-      };
-      reader.readAsDataURL(file);
+    if (file) processImage(file);
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const blob = items[i].getAsFile();
+        if (blob) processImage(blob);
+      }
     }
   };
 
@@ -475,7 +487,7 @@ export default function AdminDashboard() {
               )}
             </div>
           ) : activeTab === 'compose' ? (
-            <div className="compose-form">
+            <div className="compose-form" onPaste={handlePaste}>
               <div className="form-grid">
                 <div className="form-main">
                   <input name="title" value={formData.title} onChange={handleInputChange} type="text" placeholder="Article Title" className="title-input" />
@@ -487,7 +499,10 @@ export default function AdminDashboard() {
                     <input name="author" value={formData.author} onChange={handleInputChange} type="text" placeholder="e.g. John Doe" style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', outline: 'none', color: '#1f2937' }} />
                   </div>
                   <div className="field" style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>Article Image</label>
+                    <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>
+                      <span>Article Image</span>
+                      <span style={{ fontWeight: 400, color: '#6b7280', fontSize: '0.75rem' }}>(Upload file or paste from clipboard)</span>
+                    </label>
                     <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'block', width: '100%', padding: '0.75rem', border: '1px dashed #d1d5db', borderRadius: '0.5rem', background: '#f9fafb', cursor: 'pointer' }} />
                     {formData.image && (
                       <div style={{ marginTop: '1rem', width: '100%', height: '200px', position: 'relative', borderRadius: '0.5rem', overflow: 'hidden' }}>
