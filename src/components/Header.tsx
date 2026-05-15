@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Menu, Search, Globe, Sun, Moon, X, ChevronRight } from 'lucide-react';
+import { Menu, Search, Globe, Sun, Moon, X, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
 const CATEGORIES = [
@@ -18,9 +18,25 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const scrollRef = useRef<HTMLUListElement>(null);
 
-  const scrollRight = () => {
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 5);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
+    }
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 300;
+      scrollRef.current.scrollBy({ 
+        left: direction === 'right' ? scrollAmount : -scrollAmount, 
+        behavior: 'smooth' 
+      });
+      setTimeout(checkScroll, 500);
     }
   };
 
@@ -31,6 +47,11 @@ export default function Header() {
       setIsDarkMode(true);
       document.documentElement.setAttribute('data-theme', 'dark');
     }
+    
+    // Check initial scroll state
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
   }, []);
 
   const toggleTheme = () => {
@@ -95,7 +116,13 @@ export default function Header() {
 
       <nav className={`main-nav ${isMenuOpen ? 'open' : ''}`}>
         <div className="container nav-container">
-          <ul className="nav-links" ref={scrollRef}>
+          {canScrollLeft && (
+            <button className="nav-scroll-btn left hide-mobile" onClick={() => scroll('left')} title="Scroll left">
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          )}
+
+          <ul className="nav-links" ref={scrollRef} onScroll={checkScroll}>
             {CATEGORIES.map(cat => (
               <li key={cat}>
                 <Link href={`/news/${cat.toLowerCase()}`} onClick={() => setIsMenuOpen(false)}>
@@ -104,9 +131,12 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          <button className="nav-scroll-btn hide-mobile" onClick={scrollRight} title="Show more categories">
-            <ChevronRight className="w-5 h-5" />
-          </button>
+
+          {canScrollRight && (
+            <button className="nav-scroll-btn right hide-mobile" onClick={() => scroll('right')} title="Scroll right">
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          )}
         </div>
       </nav>
     </header>
