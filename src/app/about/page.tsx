@@ -10,7 +10,7 @@ export default function AboutPage() {
 
       <section className="policy-section">
         <p>
-          The People’s Platform is an independent digital news and media organization committed to factual reporting, public-interest journalism, and responsible storytelling in the digital age.
+          The People’s Platform is an independent digital news and media Platform owned by Opinion Platform, a platform committed to factual reporting, public-interest journalism, and responsible storytelling in the digital age.
         </p>
         <p style={{ marginTop: '1rem' }}>
           Founded with the vision of creating a credible and people-focused media platform, The People’s Platform delivers timely coverage of politics, governance, business, technology, society, culture, security, entertainment, and global affairs through accurate, balanced, and accessible journalism.

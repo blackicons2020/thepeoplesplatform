@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="footer-brand">
             <Link href="/" className="logo">
               <Globe className="w-6 h-6 text-primary" />
-              <h2>The People's Platform</h2>
+              <h2>Opinion Platform</h2>
             </Link>
             <p className="footer-desc">
               Independent, unbiased news reporting for the digital age. 
@@ -70,7 +70,7 @@ export default function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; {year} The People's Platform. All rights reserved.</p>
+          <p>&copy; {year} Opinion Platform. All rights reserved.</p>
         </div>
       </div>
     </footer>
