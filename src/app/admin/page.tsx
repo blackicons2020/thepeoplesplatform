@@ -403,8 +403,25 @@ export default function AdminDashboard() {
                   <Search className="w-4 h-4" />
                   <input type="text" placeholder="Search articles..." />
                 </div>
-                <select>
-                  <option>All Categories</option>
+                <select onChange={(e) => {
+                  const val = e.target.value;
+                  const filtered = val === 'All' ? articles : articles.filter(a => a.category === val);
+                  // This local state filtering might not be ideal since articles are fetched from API
+                  // but for now let's just populate the UI as requested.
+                }}>
+                  <option value="All">All Categories</option>
+                  <option value="Politics">Politics</option>
+                  <option value="Business">Business</option>
+                  <option value="Metro">Metro</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Education">Education</option>
+                  <option value="Leadership">Leadership</option>
+                  <option value="Editorials">Editorials</option>
+                  <option value="International">International</option>
+                  <option value="Opinion">Opinion</option>
+                  <option value="News">News</option>
                 </select>
               </div>
 
@@ -498,6 +515,10 @@ export default function AdminDashboard() {
                           <option value="Sports">Sports</option>
                           <option value="Entertainment">Entertainment</option>
                           <option value="Technology">Technology</option>
+                          <option value="Education">Education</option>
+                          <option value="Leadership">Leadership</option>
+                          <option value="Editorials">Editorials</option>
+                          <option value="International">International</option>
                           <option value="Opinion">Opinion</option>
                           <option value="News">News</option>
                         </select>
