@@ -412,6 +412,7 @@ export default function AdminDashboard() {
                   <option value="All">All Categories</option>
                   <option value="Politics">Politics</option>
                   <option value="Business">Business</option>
+                  <option value="Economy">Economy</option>
                   <option value="Metro">Metro</option>
                   <option value="Sports">Sports</option>
                   <option value="Entertainment">Entertainment</option>
@@ -511,6 +512,7 @@ export default function AdminDashboard() {
                         <select name="category" value={formData.category} onChange={handleInputChange}>
                           <option value="Politics">Politics</option>
                           <option value="Business">Business</option>
+                          <option value="Economy">Economy</option>
                           <option value="Metro">Metro</option>
                           <option value="Sports">Sports</option>
                           <option value="Entertainment">Entertainment</option>

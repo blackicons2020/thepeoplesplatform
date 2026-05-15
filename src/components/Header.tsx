@@ -6,7 +6,7 @@ import { Menu, Search, Globe, Sun, Moon, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 const CATEGORIES = [
-  'Politics', 'Metro', 'Business', 'Technology', 'Sports', 
+  'Politics', 'Metro', 'Business', 'Economy', 'Technology', 'Sports', 
   'Entertainment', 'Education', 'Leadership', 'Editorials', 'International'
 ];
 
